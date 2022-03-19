@@ -15,4 +15,11 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       
-      - run: python --version
+      - name: python version
+        run: python --version
+
+      - name: installing morph-kgc
+        run: pip install morph-kgc
+      
+      - name: running morph-kgc
+        run: python3 -m morph_kgc config.ini
