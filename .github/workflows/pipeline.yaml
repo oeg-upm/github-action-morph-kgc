@@ -10,7 +10,7 @@ on:
 jobs:    
   validate:
     runs-on: ubuntu-latest
-    name: test pipeline
+    name: action-morphkgc
     steps: 
       - name: checkout
         uses: actions/checkout@v2
@@ -20,6 +20,14 @@ jobs:
 
       - name: installing morph-kgc
         run: pip install morph-kgc
+
+      - name: action-morphkgc
+        uses: ./
+        id: 'action-morphkgc'
+
+      - run: ls
+
+      - run: ls ./morphkgc/
       
       - name: running morph-kgc
-        run: python3 -m morph_kgc config.ini
+        run: python3 -m morph_kgc ./config.ini
