@@ -55,4 +55,4 @@ jobs:
       - run: |
           ls
           ls ./morphkgc
-          ls logs/
+          cat logs
