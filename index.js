@@ -22,9 +22,7 @@ async function main() {
 
         if(fs.mkdirSync('./morphkgc/', { recursive: true })){
             console.log('La carpeta no estaba creada')
-            let data = '[CONFIGURATION] \
-                        output_dir=./morphkgc/output \
-                        output_file=result'
+            let data = '[CONFIGURATION]\noutput_dir=./morphkgc/output\noutput_file=result'
             fs.writeFile('./morphkgc/config.ini', data, err => {
                 if (err) {
                     core.setFailed(error.message);
