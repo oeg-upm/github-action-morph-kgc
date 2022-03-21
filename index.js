@@ -31,10 +31,11 @@ async function main() {
         }
 
         for (const file of changedFiles) {
-            const fle = file.filename.split('.');
+            let fle = file.filename.split('.');
 		    const file_extension = fle.pop();
+            fle = fle.join('/').split('/').pop();
             
-            console.log('El file es:: ')
+            console.log('El file es:: ' + fle)
             console.log(file)
             console.log('The file extension is:: ' + file_extension)
 
@@ -59,6 +60,12 @@ async function main() {
                 case 'rml':
                     console.log('inside switch-case --> file_extension')
                     core.setOutput('run', true);
+                    data = '\n\n[' + fle + ']\nmappings=' + file.filename;
+                    fs.appendFile('./morphkgc/config.ini',data,err => {
+                        if (err) {
+                            core.setFailed(error.message);
+                        }
+                    })
                     break;
             }
         }
