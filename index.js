@@ -10,7 +10,7 @@ async function main() {
         const repo = core.getInput('repo', { required: true });
         const pr_number = core.getInput('pr_number', { required: true });
         const token = core.getInput('token', { required: true });
-        let output = core.getInput('output', { required: false });
+        let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
         let output_format = core.getInput('output_format', { required: false });
         let clean_output_dir = core.getInput('clean_output_dir', { required: false });
@@ -24,8 +24,8 @@ async function main() {
         let logging_level = core.getInput('logging_level', { required: false });
         let logging_file = core.getInput('logging_file', { required: false });
 
-        if(output){
-            output='output_dir=' + output;
+        if(output_dir){
+            output_dir='output_dir=' + output_dir;
         }
         if(output_file){
             output_file='output_file=' + output_file;
@@ -79,13 +79,13 @@ async function main() {
             console.log('La carpeta no estaba creada')
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
                         /* output optional parameters */
-                        output + '\n' + output_file + '\n' + output_format + '\n' + clean_output_dir + '\n' + only_printable_characters + '\n' + safe_percent_encoding + '\n\n#INPUT\n' +
+                        output_dir + '\n' + output_file + '\n' + output_format + '\n' + clean_output_dir + '\n' + only_printable_characters + '\n' + safe_percent_encoding + '\n\n#INPUT\n' +
                         /* input parameters */
                         na_filter + '\n' + na_values + '\n\n#MAPPINGS\n' +
                         /* mappings parameters */
                         mapping_partition + '\n\n#MATERIALIZATION\n' +
                         /* materialization parameters */
-                        chunksize + '\n\n#MATERIALIZATION\n' +
+                        chunksize + '\n\n#MULTIPROCESSING\n' +
                         /* multiprocessing parameters */
                         number_of_processes + '\n\n#LOGS\n' +
                         /* logging parameters */

@@ -14,7 +14,7 @@ inputs:
   token:
     description: 'The token to use to access the GitHub API'
     required: true 
-  output:
+  output_dir:
     description: 'The output directory for morphkgc'
     required: false 
   output_file:
