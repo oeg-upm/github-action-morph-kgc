@@ -30,6 +30,8 @@ jobs:
       - run: ls
 
       - run: ls ./morphkgc/
+
+      - run: cat ./morphkgc/config.ini
       
-      - name: running morph-kgc
-        run: python3 -m morph_kgc ./config.ini
+      #- name: running morph-kgc
+      #  run: python3 -m morph_kgc ./morphkgc/config.ini
