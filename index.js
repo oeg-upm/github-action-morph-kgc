@@ -25,7 +25,7 @@ async function main() {
         let logging_file = core.getInput('logging_file', { required: false });
 
         if(output_dir){
-            output_dir='output_dir=./' + output_dir;
+            output_dir='output_dir=' + output_dir;
         }
         if(output_file){
             output_file='output_file=' + output_file;
