@@ -11,9 +11,57 @@ async function main() {
         const pr_number = core.getInput('pr_number', { required: true });
         const token = core.getInput('token', { required: true });
         let output = core.getInput('output', { required: false });
+        let output_file = core.getInput('output_file', { required: false });
+        let output_format = core.getInput('output_format', { required: false });
+        let clean_output_dir = core.getInput('clean_output_dir', { required: false });
+        let only_printable_characters = core.getInput('only_printable_characters', { required: false });
+        let safe_percent_encoding = core.getInput('safe_percent_encoding', { required: false });
+        let na_filter = core.getInput('na_filter', { required: false });
+        let na_values = core.getInput('na_values', { required: false });
+        let mapping_partition = core.getInput('mapping_partition', { required: false });
+        let chunksize = core.getInput('chunksize', { required: false });
+        let number_of_processes = core.getInput('number_of_processes', { required: false });
+        let logging_level = core.getInput('logging_level', { required: false });
+        let logging_file = core.getInput('logging_file', { required: false });
 
-        if(!output){
-            output='morphkgc/output'
+        if(output){
+            output='output_dir=' + output;
+        }
+        if(output_file){
+            output_file='output_file=' + output_file;
+        }
+        if(output_format){
+            output_format='output_format=' + output_format;
+        }
+        if(clean_output_dir){
+            clean_output_dir='clean_output_dir=' + clean_output_dir;
+        }
+        if(only_printable_characters){
+            only_printable_characters='only_printable_characters=' + only_printable_characters;
+        }
+        if(safe_percent_encoding){
+            safe_percent_encoding='safe_percent_encoding=' + safe_percent_encoding;
+        }
+        if(na_filter){
+            na_filter='na_filter=' + na_filter;
+        }
+        if(na_values){
+            na_values='na_values=' + na_values;
+        }
+        if(mapping_partition){
+            mapping_partition='mapping_partition=' + mapping_partition;
+        }
+        if(chunksize){
+            chunksize='chunksize=' + chunksize;
+        }
+        if(number_of_processes){
+            number_of_processes='number_of_processes=' + number_of_processes;
+        }
+        if(logging_level){
+            logging_level='logging_level=' + logging_level;
+        }
+        if(logging_file){
+            logging_file='logging_file=' + logging_file;
         }
 
         core.setOutput('run', false);
@@ -29,7 +77,19 @@ async function main() {
 
         if(fs.mkdirSync('./morphkgc/', { recursive: true })){
             console.log('La carpeta no estaba creada')
-            let data = '[CONFIGURATION]\noutput_dir=./' + output + '\noutput_file=result';
+            let data = '[CONFIGURATION]\n#OUTPUT\n' + 
+                        /* output optional parameters */
+                        output + '\n' + output_file + '\n' + output_format + '\n' + clean_output_dir + '\n' + only_printable_characters + '\n' + safe_percent_encoding + '\n\n#INPUT\n' +
+                        /* input parameters */
+                        na_filter + '\n' + na_values + '\n\n#MAPPINGS\n' +
+                        /* mappings parameters */
+                        mapping_partition + '\n\n#MATERIALIZATION\n' +
+                        /* materialization parameters */
+                        chunksize + '\n\n#MATERIALIZATION\n' +
+                        /* multiprocessing parameters */
+                        number_of_processes + '\n\n#LOGS\n' +
+                        /* logging parameters */
+                        logging_level + '\n' + logging_file;
             fs.writeFile('./morphkgc/config.ini', data, err => {
                 if (err) {
                     core.setFailed(error.message);
@@ -52,7 +112,8 @@ async function main() {
                 case 'csv':
                 case 'tsv':
                 case 'xlsx':
-                case 'parquet': 
+                case 'parquet':
+                case 'feather': 
                 case 'orc': 
                 case 'dta':
                 case 'sas':

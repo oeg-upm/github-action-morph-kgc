@@ -26,6 +26,20 @@ jobs:
           repo: ${{ github.event.repository.name }}
           pr_number: ${{ github.event.number }} 
           token: ${{ secrets.GITHUB_TOKEN }}
+          
+          na_filter: 'yes'
+          na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
+          output_dir: './output'
+          output_file: 'result'
+          output_format: 'N-QUADS'
+          clean_output_dir: 'no'
+          only_printable_characters: 'no'
+          safe_percent_encoding: ':/'
+          mapping_partition: 'PARTIAL-AGGREGATIONS'
+          chunksize: '100000'
+          logging_level: 'INFO'
+          logs_file: 'logs'
+
 
       - run: |
           ls
@@ -39,5 +53,8 @@ jobs:
             python3 -m morph_kgc ./morphkgc/config.ini
           fi
       - run: |
-          ls ./morphkgc/output/
-          cat ./morphkgc/output/result.nq
+          ls
+          ls ./output
+          cat ./output/result
+          ls logs
+          cat ./logs/*
