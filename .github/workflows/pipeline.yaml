@@ -55,6 +55,6 @@ jobs:
       - run: |
           ls
           ls ./morphkgc
-          cat ./morphkgc/result
+          cat ./morphkgc/result.nq
           ls logs
           cat ./logs/*
