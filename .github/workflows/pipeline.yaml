@@ -29,7 +29,7 @@ jobs:
           
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
-          output_dir: './output'
+          output_dir: 'output'
           output_file: 'result'
           output_format: 'N-QUADS'
           clean_output_dir: 'no'
