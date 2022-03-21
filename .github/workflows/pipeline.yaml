@@ -24,6 +24,11 @@ jobs:
       - name: action-morphkgc
         uses: ./
         id: 'action-morphkgc'
+        with:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          pr_number: ${{ github.event.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: ls
 
