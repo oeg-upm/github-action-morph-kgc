@@ -38,7 +38,7 @@ jobs:
           mapping_partition: 'PARTIAL-AGGREGATIONS'
           chunksize: '100000'
           logging_level: 'INFO'
-          logs_file: 'logs'
+          logging_file: 'logs'
 
 
       - run: |
