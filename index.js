@@ -76,7 +76,6 @@ async function main() {
         });
 
         if(fs.mkdirSync('./morphkgc/', { recursive: true })){
-            console.log('La carpeta no estaba creada')
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
                         /* output optional parameters */
                         output_dir + '\n' + output_file + '\n' + output_format + '\n' + clean_output_dir + '\n' + only_printable_characters + '\n' + safe_percent_encoding + '\n\n#INPUT\n' +
@@ -101,10 +100,6 @@ async function main() {
             let fle = file.filename.split('.');
 		    const file_extension = fle.pop();
             fle = fle.join('/').split('/').pop();
-            
-            console.log('El file es:: ' + fle);
-            console.log(file);
-            console.log('The file extension is:: ' + file_extension);
 
             switch (file_extension) {
                 case 'json':
@@ -119,7 +114,6 @@ async function main() {
                 case 'sas':
                 case 'sav':
                 case 'ods':
-                    console.log('inside switch-case --> file_extension');
                     core.setOutput('run', true);
                     break;
             }
@@ -127,7 +121,6 @@ async function main() {
                 case 'r2rml':
                 case 'rml':
                 case 'ttl':
-                    console.log('inside switch-case --> file_extension');
                     core.setOutput('run', true);
                     data = '\n\n[' + fle + ']\nmappings=./' + file.filename;
                     fs.appendFile('./morphkgc/config.ini',data,err => {
