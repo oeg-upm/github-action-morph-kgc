@@ -65,6 +65,7 @@ async function main() {
             switch (file_extension) {
                 case 'r2rml':
                 case 'rml':
+                case 'ttl':
                     console.log('inside switch-case --> file_extension');
                     core.setOutput('run', true);
                     data = '\n\n[' + fle + ']\nmappings=./' + file.filename;
