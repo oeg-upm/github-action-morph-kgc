@@ -20,6 +20,18 @@ async function main() {
             pull_number: pr_number,
         });
 
+        if(fs.mkdirSync('./morphkgc/', { recursive: true })){
+            console.log('La carpeta no estaba creada')
+            let data = '[CONFIGURATION] \
+                        output_dir=./morphkgc/output \
+                        output_file=result'
+            fs.writeFile('./morphkgc/config.ini', data, err => {
+                if (err) {
+                    core.setFailed(error.message);
+                }
+            })
+        }
+
         for (const file of changedFiles) {
             const fle = file.filename.split('.');
 		    const file_extension = fle.pop();
@@ -48,17 +60,6 @@ async function main() {
                 case 'r2rml':
                 case 'rml':
                     console.log('inside switch-case --> file_extension')
-                    if(fs.mkdirSync('./morphkgc/', { recursive: true })){
-                        console.log('La carpeta no estaba creada')
-                        let data = '[CONFIGURATION] \
-                                    output_dir=./morphkgc/output \
-                                    output_file=result'
-                        fs.writeFile('./morphkgc/config.ini', data, err => {
-                            if (err) {
-                                core.setFailed(error.message);
-                            }
-                        })
-                    }
                     core.setOutput('run', true);
                     break;
             }
