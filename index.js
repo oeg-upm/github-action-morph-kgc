@@ -10,6 +10,13 @@ async function main() {
         const repo = core.getInput('repo', { required: true });
         const pr_number = core.getInput('pr_number', { required: true });
         const token = core.getInput('token', { required: true });
+        let output = core.getInput('output', { required: false });
+
+        if(!output){
+            output='morphkgc/output'
+        }
+
+        core.setOutput('run', false);
 
         // Instance of Octokit to call the API
         const octokit = new github.getOctokit(token);
@@ -22,7 +29,7 @@ async function main() {
 
         if(fs.mkdirSync('./morphkgc/', { recursive: true })){
             console.log('La carpeta no estaba creada')
-            let data = '[CONFIGURATION]\noutput_dir=./morphkgc/output\noutput_file=result'
+            let data = '[CONFIGURATION]\noutput_dir=./' + output + '\noutput_file=result';
             fs.writeFile('./morphkgc/config.ini', data, err => {
                 if (err) {
                     core.setFailed(error.message);
@@ -35,9 +42,9 @@ async function main() {
 		    const file_extension = fle.pop();
             fle = fle.join('/').split('/').pop();
             
-            console.log('El file es:: ' + fle)
-            console.log(file)
-            console.log('The file extension is:: ' + file_extension)
+            console.log('El file es:: ' + fle);
+            console.log(file);
+            console.log('The file extension is:: ' + file_extension);
 
             switch (file_extension) {
                 case 'json':
@@ -51,21 +58,21 @@ async function main() {
                 case 'sas':
                 case 'sav':
                 case 'ods':
-                    console.log('inside switch-case --> file_extension')
+                    console.log('inside switch-case --> file_extension');
                     core.setOutput('run', true);
                     break;
             }
             switch (file_extension) {
                 case 'r2rml':
                 case 'rml':
-                    console.log('inside switch-case --> file_extension')
+                    console.log('inside switch-case --> file_extension');
                     core.setOutput('run', true);
-                    data = '\n\n[' + fle + ']\nmappings=' + file.filename;
+                    data = '\n\n[' + fle + ']\nmappings=./' + file.filename;
                     fs.appendFile('./morphkgc/config.ini',data,err => {
                         if (err) {
                             core.setFailed(error.message);
                         }
-                    })
+                    });
                     break;
             }
         }

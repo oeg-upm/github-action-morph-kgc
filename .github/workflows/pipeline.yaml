@@ -27,11 +27,17 @@ jobs:
           pr_number: ${{ github.event.number }} 
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: ls
-
-      - run: ls ./morphkgc/
-
-      - run: cat ./morphkgc/config.ini
+      - run: |
+          ls
+          ls ./morphkgc/
+          cat ./morphkgc/config.ini
       
-      #- name: running morph-kgc
-      #  run: python3 -m morph_kgc ./morphkgc/config.ini
+      - name: running morph-kgc
+        run: |
+          if ${{ steps.action-morphkgc.outputs.run }}
+          then
+            python3 -m morph_kgc ./morphkgc/config.ini
+          fi
+      - run: |
+          ls ./morphkgc/output/
+          cat ./morphkgc/output/result.nq
