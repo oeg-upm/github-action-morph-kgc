@@ -52,6 +52,13 @@ jobs:
           if ${{ steps.action-morphkgc.outputs.run }}
           then
             python3 -m morph_kgc ./morphkgc/config.ini
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A
+            set +e
+            git status | grep "nothing to commit, working tree clean"
+            if [ $? -eq 0 ]; then set -e; echo "INFO: No changes since last run"; else set -e; \
+              git commit -m "morph-kgc result for ${{ github.actor }} - ${{ github.event.number }}" --allow-empty; git push origin HEAD:${{ github.head_ref }} --force; fi
           fi
 
 ```
