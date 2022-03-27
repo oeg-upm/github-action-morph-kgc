@@ -39,20 +39,17 @@ jobs:
           chunksize: '100000'
           logging_level: 'INFO'
           logging_file: 'logs'
-
-
-      - run: |
-          ls
-          ls ./morphkgc/
-          cat ./morphkgc/config.ini
       
       - name: running morph-kgc
         run: |
           if ${{ steps.action-morphkgc.outputs.run }}
           then
             python3 -m morph_kgc ./morphkgc/config.ini
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add .
+            set +e
+            git status | grep "nothing to commit, working tree clean"
+            if [ $? -eq 0 ]; then set -e; echo "INFO: No changes since last run"; else set -e; \
+              git commit -m "feat: convert to RDF with Github Actions"; git push; fi
           fi
-      - run: |
-          ls
-          ls ./morphkgc
-          cat logs
