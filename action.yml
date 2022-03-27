@@ -1,0 +1,63 @@
+name: 'github-action-morphkgc'
+description: 'runs morphkgc automaticly if data or mappings are added/modified'
+
+inputs:
+  owner:
+    description: 'The owner of the repository'
+    required: true
+  repo:
+    description: 'The name of the repository'
+    required: true
+  pr_number:
+    description: 'The number of the pull request'
+    required: true
+  token:
+    description: 'The token to use to access the GitHub API'
+    required: true 
+  output_dir:
+    description: 'The output directory for morphkgc'
+    required: false 
+  output_file:
+    description: 'File to write the results to. If it is empty (no value) then an independent output file is generated for each group of the mapping partition'
+    required: false 
+  output_format:
+    description: 'RDF serialization to use for output results'
+    required: false 
+  clean_output_dir:
+    description: 'Remove everything from output_dir before starting with materialization'
+    required: false 
+  only_printable_characters:
+    description: 'Remove characters in the genarated RDF that are not printable'
+    required: false 
+  safe_percent_encoding:
+    description: 'Set of ASCII characters that should not be percent encoded. All characters are encoded by default'
+    required: false 
+  na_filter:
+    description: 'If specified, the values from the option na_values will be interpreted as NULL'
+    required: false 
+  na_values:
+    description: 'Set of values to be interpreted as NULL when retrieving data from the input sources. The valid values are a list of values separated by commas'
+    required: false 
+  mapping_partition:
+    description: 'Mapping partitioning algorithm to use. Mapping partitioning can also be disabled'
+    required: false 
+  chunksize:
+    description: 'Size of the chunks in which data is processed. Chunk processing is not supported for PARQUET, FEATHER, ORC and SPSS formats, for which chunksize will be ignored'
+    required: false 
+  number_of_processes:
+    description: 'The number of processes to use. If 1, multiprocessing is disabled'
+    required: false 
+  logging_level:
+    description: 'Sets the level of the log messages to show'
+    required: false 
+  logging_file:
+    description: 'If not provided, log messages will be redirected to stdout. If a file path is provided, log messages will be written to file'
+    required: false 
+
+outputs:
+  run:
+    description: 'Tells the pipeline if morphkgc needs to be executed'
+
+runs:
+  using: 'node16'
+  main: 'index.js'

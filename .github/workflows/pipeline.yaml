@@ -1,0 +1,55 @@
+name: pipeline
+on:   
+  pull_request:
+    branches:    
+      - main
+
+jobs:    
+  validate:
+    runs-on: ubuntu-latest
+    name: action-morphkgc
+    steps: 
+      - name: checkout
+        uses: actions/checkout@v2
+      
+      - name: python version
+        run: python --version
+
+      - name: installing morph-kgc
+        run: pip install morph-kgc
+
+      - name: action-morphkgc
+        uses: ./
+        id: 'action-morphkgc'
+        with:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          pr_number: ${{ github.event.number }} 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+          na_filter: 'yes'
+          na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
+          output_dir: 'morphkgc'
+          output_file: 'result'
+          output_format: 'N-QUADS'
+          clean_output_dir: 'no'
+          only_printable_characters: 'no'
+          safe_percent_encoding: ':/'
+          mapping_partition: 'PARTIAL-AGGREGATIONS'
+          chunksize: '100000'
+          logging_level: 'INFO'
+          logging_file: 'logs'
+      
+      - name: running morph-kgc
+        run: |
+          if ${{ steps.action-morphkgc.outputs.run }}
+          then
+            python3 -m morph_kgc ./morphkgc/config.ini
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A
+            set +e
+            git status | grep "nothing to commit, working tree clean"
+            if [ $? -eq 0 ]; then set -e; echo "INFO: No changes since last run"; else set -e; \
+              git commit -m "morph-kgc result for ${{ github.actor }} - ${{ github.event.number }}" --allow-empty; git push origin HEAD:${{ github.head_ref }} --force; fi
+          fi
