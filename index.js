@@ -99,7 +99,7 @@ async function main() {
         for (const file of changedFiles) {
             let fle = file.filename.split('.');
 		    const file_extension = fle.pop();
-            const mapping_file_extension = fle.pop() + file_extension;
+            const mapping_file_extension = fle.pop() + "." + file_extension;
             fle = fle.join('/').split('/').pop();
 
             switch (file_extension) {
