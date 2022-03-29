@@ -42,9 +42,9 @@ jobs:
       
       - name: running morph-kgc
         run: |
-          ls ./morphkgc/
-          cat ./morphkgc/config.ini
-          echo "---"
+          #ls ./morphkgc/
+          #cat ./morphkgc/config.ini
+          #echo "---"
 
           if ${{ steps.action-morphkgc.outputs.run }}
           then

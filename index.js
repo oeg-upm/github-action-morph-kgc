@@ -118,14 +118,11 @@ async function main() {
                     core.setOutput('run', true);
                     break;
             }
-             console.log("Estoy en el for pelotudo")
-             console.log(mapping_file_extension)
             switch (mapping_file_extension) {
                 case 'r2rml.ttl':
                 case 'r2rml.nt':
                 case 'rml.ttl':
                 case 'rml.nt':
-                    console.log("Entro pelotudo")
                     core.setOutput('run', true);
                     data = '\n\n[' + fle + ']\nmappings=./' + file.filename;
                     fs.appendFile('./morphkgc/config.ini',data,err => {
