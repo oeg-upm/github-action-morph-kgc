@@ -99,6 +99,7 @@ async function main() {
         for (const file of changedFiles) {
             let fle = file.filename.split('.');
 		    const file_extension = fle.pop();
+            const mapping_file_extension = fle.pop() + "." + file_extension;
             fle = fle.join('/').split('/').pop();
 
             switch (file_extension) {
@@ -117,10 +118,11 @@ async function main() {
                     core.setOutput('run', true);
                     break;
             }
-            switch (file_extension) {
-                case 'r2rml':
-                case 'rml':
-                case 'ttl':
+            switch (mapping_file_extension) {
+                case 'r2rml.ttl':
+                case 'r2rml.nt':
+                case 'rml.ttl':
+                case 'rml.nt':
                     core.setOutput('run', true);
                     data = '\n\n[' + fle + ']\nmappings=./' + file.filename;
                     fs.appendFile('./morphkgc/config.ini',data,err => {
