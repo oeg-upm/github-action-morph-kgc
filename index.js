@@ -118,6 +118,8 @@ async function main() {
                     core.setOutput('run', true);
                     break;
             }
+             console.log("Estoy en el for pelotudo")
+             console.log(mapping_file_extension)
             switch (mapping_file_extension) {
                 case 'r2rml.ttl':
                 case 'r2rml.nt':
