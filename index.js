@@ -75,7 +75,7 @@ async function main() {
             pull_number: pr_number,
         });
 
-        if(fs.mkdirSync('./morphkgc/', { recursive: true })){
+        if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
                         /* output optional parameters */
                         output_dir + '\n' + output_file + '\n' + output_format + '\n' + clean_output_dir + '\n' + only_printable_characters + '\n' + safe_percent_encoding + '\n\n#INPUT\n' +
@@ -89,13 +89,14 @@ async function main() {
                         number_of_processes + '\n\n#LOGS\n' +
                         /* logging parameters */
                         logging_level + '\n' + logging_file;
-            fs.writeFile('./morphkgc/config.ini', data, err => {
+            fs.writeFile('./morph-kgc-exec/config.ini', data, err => {
                 if (err) {
                     core.setFailed(error.message);
                 }
             })
         }
 
+        let i = 1;
         for (const file of changedFiles) {
             let fle = file.filename.split('.');
 		    const file_extension = fle.pop();
@@ -119,17 +120,16 @@ async function main() {
                     break;
             }
             switch (mapping_file_extension) {
-                case 'r2rml.ttl':
-                case 'r2rml.nt':
                 case 'rml.ttl':
                 case 'rml.nt':
                     core.setOutput('run', true);
-                    data = '\n\n[' + fle + ']\nmappings=./' + file.filename;
-                    fs.appendFile('./morphkgc/config.ini',data,err => {
+                    data = '\n\n[' + "mapping_" + fle + i + ']\nmappings=./' + file.filename;
+                    fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
                         if (err) {
                             core.setFailed(error.message);
                         }
                     });
+                    i++;
                     break;
             }
         }

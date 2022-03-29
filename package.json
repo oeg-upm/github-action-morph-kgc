@@ -1,5 +1,5 @@
 {
-  "name": "github-action-morphkgc",
+  "name": "github-action-morph-kgc",
   "version": "1.0.0",
   "description": "Repository for the GitHub Action to create a knowledge graph from structured or semi-structured sources using RML mappings and morph-kgc",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oeg-upm/github-action-morphkgc.git"
+    "url": "git+https://github.com/oeg-upm/github-action-morph-kgc.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/oeg-upm/github-action-morphkgc/issues"
+    "url": "https://github.com/oeg-upm/github-action-morph-kgc/issues"
   },
-  "homepage": "https://github.com/oeg-upm/github-action-morphkgc#readme",
+  "homepage": "https://github.com/oeg-upm/github-action-morph-kgc#readme",
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",

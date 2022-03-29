@@ -48,7 +48,8 @@ jobs:
 
           if ${{ steps.action-morphkgc.outputs.run }}
           then
-            python3 -m morph_kgc ./morphkgc/config.ini
+            python3 -m morph_kgc ./morph-kgc-exec/config.ini
+            rm -r ./morph-kgc-exec
             git config --global user.name 'github-actions[bot]'
             git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add -A
