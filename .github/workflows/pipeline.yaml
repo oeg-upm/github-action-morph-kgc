@@ -44,6 +44,7 @@ jobs:
         run: |
           ls ./morphkgc/
           cat ./morphkgc/config.ini
+          echo "---"
 
           if ${{ steps.action-morphkgc.outputs.run }}
           then
