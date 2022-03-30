@@ -19,8 +19,9 @@ jobs:
           
       - name: get file changes
         run: | 
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changes
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > inter
+          echo "::set-output name=changes::${{inter}}" > changes
+          echo ${{changes}}
       
       - name: python version
         run: python --version
