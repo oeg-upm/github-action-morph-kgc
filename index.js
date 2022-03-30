@@ -62,6 +62,8 @@ async function main() {
         
         if(!changes)
             changes = getAllFiles('./');
+        else
+            changes = changes.split('\n')
 
         core.setOutput('run', false);
 
@@ -86,7 +88,7 @@ async function main() {
             })
         }
 
-        for (const file of changes.split('\n')) {
+        for (const file of changes) {
             let fle = file.split('.');
             const file_extension = fle.pop();
             if (file_extension == 'ttl' || file_extension == 'nt'){
