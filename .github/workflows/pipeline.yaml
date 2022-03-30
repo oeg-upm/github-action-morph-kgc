@@ -23,6 +23,9 @@ jobs:
           echo "::set-output name=changes::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})" > changes
         id: "changes"
       
+      - name: compr
+        run: echo ${{ steps.changes.outputs.changes }}
+      
       - name: python version
         run: python --version
 
