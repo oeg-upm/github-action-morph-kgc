@@ -134,7 +134,7 @@ async function main() {
                         });
                         break;
                 }
-            }
+            } 
         }
         else {
             let res = getAllFiles("./");

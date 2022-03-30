@@ -20,6 +20,10 @@ jobs:
 
       - name: installing morph-kgc
         run: pip install morph-kgc
+      
+      - name: get file changes
+        run: | 
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
 
       - name: action-morphkgc
         uses: ./
