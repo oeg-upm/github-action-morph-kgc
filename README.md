@@ -1,5 +1,7 @@
 # github-action-morphkgc
 The goal of this action is to create a knowledge graph from structured or semi-structured sources using RML mappings and [morph-kgc](https://github.com/oeg-upm/morph-kgc). 
+## Considerations
+The mapping file extension needs to be .rml.ttl or .rml.nt
 ## Usage
 Create a `.github.workflows/[name].yaml` file in the repository.
 

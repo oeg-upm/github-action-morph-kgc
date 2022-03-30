@@ -88,6 +88,7 @@ async function main() {
             let fle = file.split('.');
             const file_extension = fle.pop();
             if (file_extension == 'ttl' || file_extension == 'nt'){
+                console.log("entro")
                 const mapping_file_extension = fle.pop();
                 switch (file_extension) {
                     case 'json':
@@ -108,6 +109,7 @@ async function main() {
                 switch (mapping_file_extension) {
                     case 'rml':
                     case 'rml':
+                        console.log("entro")
                         fle = fle.join('/').split('/').pop();
                         core.setOutput('run', true);
                         data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file;
