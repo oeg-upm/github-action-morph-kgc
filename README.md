@@ -72,7 +72,6 @@ jobs:
 ## Inputs
 ### `changes` (optional)
 The changes in the commit, it is taken from an earlyer step named changes. 
-
 ### `output_dir` (optional)
 The output directory for morphkgc.
 - `Default value`: output
