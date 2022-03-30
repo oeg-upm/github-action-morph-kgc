@@ -9,6 +9,9 @@ Example workflow:
 ```
 name: [name]
 on:   
+  push:
+    branches:    
+      - main
   pull_request:
     branches:    
       - main
