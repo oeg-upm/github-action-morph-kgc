@@ -61,11 +61,12 @@ async function main() {
             logging_file='logging_file=' + logging_file;
         
         if(!changes){
-            changes = getAllFiles('./');
-            for (let file of changes) {
+            changes = [];
+            let files = getAllFiles('./');
+            for (let file of files) {
                 file = file.split('/');
                 file.splice(0, 7);
-                file = file.join('/');
+                changes.push(file.join('/'));
             }
         }
         else
