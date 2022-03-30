@@ -11,6 +11,7 @@ async function main() {
         const repo = core.getInput('repo', { required: true });
         const pr_number = core.getInput('pr_number', { required: false });
         const token = core.getInput('token', { required: true });
+        const changes = core.getInput('changes', { required: true });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
         let output_format = core.getInput('output_format', { required: false });
@@ -88,6 +89,8 @@ async function main() {
             })
         }
 
+        console.log(changes);
+
         // Si es un pull request
         if(pr_number){
             // Instance of Octokit to call the API
@@ -138,7 +141,7 @@ async function main() {
         }
         else {
             let res = getAllFiles("./");
-            console.log(res);
+            //console.log(res);
         }
     }
     catch (error){
