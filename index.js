@@ -65,7 +65,7 @@ async function main() {
             let files = getAllFiles('./');
             for (let file of files) {
                 file = file.split('/');
-                file.splice(0, 7);
+                file.splice(0, 6);
                 changes.push(file.join('/'));
             }
         }
@@ -139,7 +139,7 @@ async function main() {
 }
 
 function getAllFiles (dirPath, arrayOfFiles) {
-  files = fs.readdirSync(dirPath)
+  let files = fs.readdirSync(dirPath)
 
   arrayOfFiles = arrayOfFiles || []
 
