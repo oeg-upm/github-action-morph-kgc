@@ -94,11 +94,16 @@ async function main() {
         for (const file of changes) {
             let fle = file.split('.');
             const file_extension = fle.pop();
+            console.log(fle);
             if (file_extension == 'ttl' || file_extension == 'nt'){
+                console.log("inside");
+                console.log(file_extension);
                 const mapping_file_extension = fle.pop();
                 switch (mapping_file_extension) {
                     case 'rml':
                     case 'rml':
+                        console.log("your mama");
+                        console.log(mapping_file_extension);
                         fle = fle.join('/').split('/').pop();
                         core.setOutput('run', true);
                         data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file.filename;
