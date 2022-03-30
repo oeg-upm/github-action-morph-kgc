@@ -20,14 +20,8 @@ jobs:
       - name: get file changes
         run: | 
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          #echo "::set-output name=TAG_NAME::$(cat 'index.js')')"
           echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
         id: "changes"
-      
-      - name: compr
-        run: | 
-            echo ${{ steps.changes.outputs.CHANGES }}
-            echo ${{ steps.changes.outputs.TAG_NAME }}
       
       - name: python version
         run: python --version
@@ -43,7 +37,7 @@ jobs:
           repo: ${{ github.event.repository.name }}
           pr_number: ${{ github.event.number }} 
           token: ${{ secrets.GITHUB_TOKEN }}
-          changes: $(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          changes: ${{ steps.changes.outputs.CHANGES }}
           
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
