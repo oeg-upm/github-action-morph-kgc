@@ -67,21 +67,12 @@ async function main() {
 
         core.setOutput('run', false);
 
-        // Instance of Octokit to call the API
-        const octokit = new github.getOctokit(token);
-
-        const { data: changedFiles } = await octokit.rest.pulls.listFiles({
-            owner,
-            repo,
-            pull_number: pr_number,
-        });
-
         const wk = await walk("./", function(err, results) {if (err) throw err; console.log(results);});
         console.log("El walk");
         console.log(wk);
         console.log("---");
-        console.log("changedFiles");
-        console.log(changedFiles);
+        console.log("pr");
+        console.log(pr_number);
         console.log("---");
 
         if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
@@ -104,8 +95,17 @@ async function main() {
                 }
             })
         }
+        if(pr_number){
+            // Instance of Octokit to call the API
+            const octokit = new github.getOctokit(token);
 
-        let i = 1;
+            const { data: changedFiles } = await octokit.rest.pulls.listFiles({
+                owner,
+                repo,
+                pull_number: pr_number,
+            });
+        }
+
         for (const file of changedFiles) {
             let fle = file.filename.split('.');
 		    const file_extension = fle.pop();
@@ -132,13 +132,12 @@ async function main() {
                 case 'rml.ttl':
                 case 'rml.nt':
                     core.setOutput('run', true);
-                    data = '\n\n[' + "mapping_" + fle + i + ']\nmappings=./' + file.filename;
+                    data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file.filename;
                     fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
                         if (err) {
                             core.setFailed(error.message);
                         }
                     });
-                    i++;
                     break;
             }
         }
