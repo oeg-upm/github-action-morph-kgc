@@ -61,9 +61,11 @@ async function main() {
             logging_file='logging_file=' + logging_file;
         
         if(!changes){
-            changes = getAllFiles('./').split('/');
-            changes.splice(0, 7);
-            changes = changes.join('/');
+            changes = getAllFiles('./');
+            changes.forEach(function(elem){ 
+                elem.split('/');
+                elem.splice(0, 7);
+                elem = elem.join('/');});
         }
         else
             changes = changes.split('\n')
