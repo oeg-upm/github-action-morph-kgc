@@ -2,6 +2,7 @@ const core =  require('@actions/core');
 const github = require('@actions/github');
 const { http, https } = require('follow-redirects');
 const fs = require('fs');
+const path = require('path');
 
 async function main() {
     try {
@@ -75,6 +76,14 @@ async function main() {
             pull_number: pr_number,
         });
 
+        const wk = await walk("./", function(err, results) {if (err) throw err; console.log(results);});
+        console.log("El walk");
+        console.log(wk);
+        console.log("---");
+        console.log("changedFiles");
+        console.log(changedFiles);
+        console.log("---");
+
         if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
                         /* output optional parameters */
@@ -139,40 +148,36 @@ async function main() {
     }
 }
 
-// function returns a Promise
-function get_promise(url) {
-	return new Promise((resolve, reject) => {
-		https.get(url, (response) => {
-            if (response.statusCode !== 200) {
-                    core.setFailed(`Did not get an OK from the server. Code: ${response.statusCode}, from petition to: \n`, url);
-                    response.resume();
-                    return;
-            }
-            
-			let chunks_of_data = [];
+// search all the files in a directory
+async function walk(dir, done) {
+  var results = [];
+  fs.readdir(dir, function(err, list) {
+    if (err) return done(err);
+    var i = 0;
+    (function next() {
+      var file = list[i++];
+      if (!file) return done(null, results);
+      file = path.resolve(dir, file);
+      fs.stat(file, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(file, function(err, res) {
+            results = results.concat(res);
+            next();
+          });
+        } else {
+          results.push(file);
+          next();
+        }
+      });
+    })();
+  });
+};
 
-			response.on('data', (fragments) => {
-				chunks_of_data.push(fragments);
-			});
-
-			response.on('end', () => {
-				let response_body = Buffer.concat(chunks_of_data);
-				resolve(response_body.toString());
-			});
-
-			response.on('error', (error) => {
-				reject(error);
-			});
-		});
-	});
-}
-
-
-// async function to make http request
-async function makeSynchronousRequest(url) {
+// async function to walk
+async function makeSynchronousRequest(dir, done) {
 	try {
-		let http_promise = get_promise(url);
-		let response_body = await http_promise;
+		let wk = walk(dir, done);
+		let response_body = await wk;
 
 		return response_body;
 	}
