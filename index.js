@@ -6,11 +6,6 @@ const path = require('path');
 
 async function main() {
     try {
-        // take the input token for the action
-        const owner = core.getInput('owner', { required: true });
-        const repo = core.getInput('repo', { required: true });
-        const pr_number = core.getInput('pr_number', { required: false });
-        const token = core.getInput('token', { required: true });
         const changes = core.getInput('changes', { required: true });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
@@ -92,19 +87,30 @@ async function main() {
         for (const file of changes.split('\n')) {
             let fle = file.split('.');
             const file_extension = fle.pop();
-            console.log(fle);
             if (file_extension == 'ttl' || file_extension == 'nt'){
-                console.log("inside");
-                console.log(file_extension);
                 const mapping_file_extension = fle.pop();
+                switch (file_extension) {
+                    case 'json':
+                    case 'xml':
+                    case 'csv':
+                    case 'tsv':
+                    case 'xlsx':
+                    case 'parquet':
+                    case 'feather': 
+                    case 'orc': 
+                    case 'dta':
+                    case 'sas':
+                    case 'sav':
+                    case 'ods':
+                        core.setOutput('run', true);
+                        break;
+                }
                 switch (mapping_file_extension) {
                     case 'rml':
                     case 'rml':
-                        console.log("your mama");
-                        console.log(mapping_file_extension);
                         fle = fle.join('/').split('/').pop();
                         core.setOutput('run', true);
-                        data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file.filename;
+                        data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file;
                         fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
                             if (err) {
                                 core.setFailed(error.message);
