@@ -68,7 +68,6 @@ async function main() {
                 file.splice(0, 7);
                 changes.push(file.join('/'));
             }
-            console.log(changes);
         }
         else
             changes = changes.split('\n')
@@ -100,6 +99,7 @@ async function main() {
             let fle = file.split('.');
             const file_extension = fle.pop();
             if (file_extension == 'ttl' || file_extension == 'nt'){
+                console.log(file);
                 const mapping_file_extension = fle.pop();
                 switch (file_extension) {
                     case 'json':
