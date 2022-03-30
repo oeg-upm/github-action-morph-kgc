@@ -91,43 +91,15 @@ async function main() {
 
         console.log(changes);
 
-        // Si es un pull request
-        if(pr_number){
-            // Instance of Octokit to call the API
-            const octokit = new github.getOctokit(token);
-
-            const { data: changedFiles } = await octokit.rest.pulls.listFiles({
-                owner,
-                repo,
-                pull_number: pr_number,
-            });
-        
-
-            for (const file of changedFiles) {
-                let fle = file.filename.split('.');
-                const file_extension = fle.pop();
-                const mapping_file_extension = fle.pop() + "." + file_extension;
-                fle = fle.join('/').split('/').pop();
-
-                switch (file_extension) {
-                    case 'json':
-                    case 'xml':
-                    case 'csv':
-                    case 'tsv':
-                    case 'xlsx':
-                    case 'parquet':
-                    case 'feather': 
-                    case 'orc': 
-                    case 'dta':
-                    case 'sas':
-                    case 'sav':
-                    case 'ods':
-                        core.setOutput('run', true);
-                        break;
-                }
+        for (const file of changes) {
+            let fle = file.split('.');
+            const file_extension = fle.pop();
+            if (file_extension == 'ttl' || file_extension == 'nt'){
+                const mapping_file_extension = fle.pop();
                 switch (mapping_file_extension) {
-                    case 'rml.ttl':
-                    case 'rml.nt':
+                    case 'rml':
+                    case 'rml':
+                        fle = fle.join('/').split('/').pop();
                         core.setOutput('run', true);
                         data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file.filename;
                         fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
@@ -137,33 +109,12 @@ async function main() {
                         });
                         break;
                 }
-            }  
-        }
-        else {
-            let res = getAllFiles("./");
-            //console.log(res);
-        }
+            }
+        }  
     }
     catch (error){
         core.setFailed(error.message);
     }
-}
-
-// search all the files in a directory
-function getAllFiles (dirPath, arrayOfFiles) {
-  files = fs.readdirSync(dirPath)
-
-  arrayOfFiles = arrayOfFiles || []
-
-  files.forEach(function(file) {
-    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-    } else {
-      arrayOfFiles.push(path.join(__dirname, dirPath, "/", file))
-    }
-  })
-
-  return arrayOfFiles
 }
 
 main();
