@@ -9,7 +9,7 @@ async function main() {
         // take the input token for the action
         const owner = core.getInput('owner', { required: true });
         const repo = core.getInput('repo', { required: true });
-        const pr_number = core.getInput('pr_number', { required: true });
+        const pr_number = core.getInput('pr_number', { required: false });
         const token = core.getInput('token', { required: true });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
