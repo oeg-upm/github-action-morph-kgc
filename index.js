@@ -6,7 +6,7 @@ const path = require('path');
 
 async function main() {
     try {
-        const changes = core.getInput('changes', { required: false });
+        let changes = core.getInput('changes', { required: false });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
         let output_format = core.getInput('output_format', { required: false });
@@ -21,50 +21,49 @@ async function main() {
         let logging_level = core.getInput('logging_level', { required: false });
         let logging_file = core.getInput('logging_file', { required: false });
 
-        if(output_dir){
+        if(output_dir)
             output_dir='output_dir=' + output_dir;
-        }
-        if(output_file){
+        
+        if(output_file)
             output_file='output_file=' + output_file;
-        }
-        if(output_format){
+        
+        if(output_format)
             output_format='output_format=' + output_format;
-        }
-        if(clean_output_dir){
+        
+        if(clean_output_dir)
             clean_output_dir='clean_output_dir=' + clean_output_dir;
-        }
-        if(only_printable_characters){
+        
+        if(only_printable_characters)
             only_printable_characters='only_printable_characters=' + only_printable_characters;
-        }
-        if(safe_percent_encoding){
+        
+        if(safe_percent_encoding)
             safe_percent_encoding='safe_percent_encoding=' + safe_percent_encoding;
-        }
-        if(na_filter){
+        
+        if(na_filter)
             na_filter='na_filter=' + na_filter;
-        }
-        if(na_values){
+        
+        if(na_values)
             na_values='na_values=' + na_values;
-        }
-        if(mapping_partition){
+        
+        if(mapping_partition)
             mapping_partition='mapping_partition=' + mapping_partition;
-        }
-        if(chunksize){
+        
+        if(chunksize)
             chunksize='chunksize=' + chunksize;
-        }
-        if(number_of_processes){
+        
+        if(number_of_processes)
             number_of_processes='number_of_processes=' + number_of_processes;
-        }
-        if(logging_level){
+        
+        if(logging_level)
             logging_level='logging_level=' + logging_level;
-        }
-        if(logging_file){
+        
+        if(logging_file)
             logging_file='logging_file=' + logging_file;
-        }
-
-        core.setOutput('run', false);
-
+        
         if(!changes)
             changes = getAllFiles('./');
+
+        core.setOutput('run', false);
 
         if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
