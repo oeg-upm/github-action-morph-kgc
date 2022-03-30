@@ -20,11 +20,14 @@ jobs:
       - name: get file changes
         run: | 
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          echo "::set-output name=changes::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})" > changes
+          echo "::set-output name=TAG_NAME::$(cat projectFile | grep -Po '(?<=Version>).*(?=</Version>)')"
+          echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})" > changes
         id: "changes"
       
       - name: compr
-        run: echo ${{ steps.changes.outputs.changes }}
+        run: | 
+            echo ${{ steps.changes.outputs.CHANGES }}
+            echo ${{ steps.changes.outputs.TAG_NAME }}
       
       - name: python version
         run: python --version
