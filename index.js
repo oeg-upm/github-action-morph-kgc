@@ -68,6 +68,7 @@ async function main() {
                 file.splice(0, 7);
                 changes.push(file.join('/'));
             }
+            console.log(changes);
         }
         else
             changes = changes.split('\n')
