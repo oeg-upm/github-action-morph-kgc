@@ -60,8 +60,11 @@ async function main() {
         if(logging_file)
             logging_file='logging_file=' + logging_file;
         
-        if(!changes)
-            changes = getAllFiles('./');
+        if(!changes){
+            changes = getAllFiles('./').split('/');
+            changes.splice(0, 7);
+            changes = changes.join('/');
+        }
         else
             changes = changes.split('\n')
 
