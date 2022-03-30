@@ -89,9 +89,7 @@ async function main() {
             })
         }
 
-        console.log(changes);
-
-        for (const file of changes) {
+        for (const file of changes.split('\n')) {
             let fle = file.split('.');
             const file_extension = fle.pop();
             console.log(fle);
