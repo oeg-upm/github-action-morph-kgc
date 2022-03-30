@@ -19,9 +19,9 @@ jobs:
           
       - name: get file changes
         run: | 
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > inter
-          echo "::set-output name=changes::${{inter}}" > changes
-          echo ${{changes}}
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          echo "::set-output name=changes::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})" > changes
+        id: "changes"
       
       - name: python version
         run: python --version
@@ -37,7 +37,7 @@ jobs:
           repo: ${{ github.event.repository.name }}
           pr_number: ${{ github.event.number }} 
           token: ${{ secrets.GITHUB_TOKEN }}
-          changes: ${{changes}}
+          changes: ${{ steps.changes.outputs.changes }}
           
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
