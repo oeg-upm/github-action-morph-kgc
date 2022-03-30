@@ -6,7 +6,7 @@ const path = require('path');
 
 async function main() {
     try {
-        const changes = core.getInput('changes', { required: true });
+        const changes = core.getInput('changes', { required: false });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
         let output_format = core.getInput('output_format', { required: false });
@@ -62,6 +62,9 @@ async function main() {
         }
 
         core.setOutput('run', false);
+
+        if(!changes)
+            changes = getAllFiles('./');
 
         if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
@@ -124,6 +127,22 @@ async function main() {
     catch (error){
         core.setFailed(error.message);
     }
+}
+
+function getAllFiles (dirPath, arrayOfFiles) {
+  files = fs.readdirSync(dirPath)
+
+  arrayOfFiles = arrayOfFiles || []
+
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+    } else {
+      arrayOfFiles.push(path.join(__dirname, dirPath, "/", file))
+    }
+  })
+
+  return arrayOfFiles
 }
 
 main();

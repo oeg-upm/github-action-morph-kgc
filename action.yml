@@ -4,7 +4,7 @@ description: 'runs morphkgc automaticly if data or mappings are added/modified'
 inputs:
   changes:
     description: 'The changes commited'
-    required: true 
+    required: false 
   output_dir:
     description: 'The output directory for morphkgc'
     required: false 

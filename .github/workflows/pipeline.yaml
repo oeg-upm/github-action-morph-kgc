@@ -34,7 +34,6 @@ jobs:
         id: 'action-morphkgc'
         with:
           changes: ${{ steps.changes.outputs.CHANGES }}
-          
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
           output_dir: 'morphkgc'

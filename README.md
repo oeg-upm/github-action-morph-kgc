@@ -39,11 +39,7 @@ jobs:
         uses: ./
         id: 'action-morphkgc'
         with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          pr_number: ${{ github.event.number }} 
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
+          changes: ${{ steps.changes.outputs.CHANGES }}
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
           output_dir: 'morphkgc'
@@ -74,7 +70,7 @@ jobs:
 
 ```
 ## Inputs
-### `changes`
+### `changes` (optional)
 The changes in the commit, it is taken from an earlyer step named changes. 
 
 ### `output_dir` (optional)
