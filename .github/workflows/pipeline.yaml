@@ -17,7 +17,7 @@ jobs:
         with: 
           fetch-depth: 0
           
-      - name: get file changes
+      - name: changes
         run: | 
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
           echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
