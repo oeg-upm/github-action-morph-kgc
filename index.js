@@ -67,14 +67,6 @@ async function main() {
 
         core.setOutput('run', false);
 
-        const wk = await walk("./", function(err, results) {if (err) throw err; console.log(results);});
-        console.log("El walk");
-        console.log(wk);
-        console.log("---");
-        console.log("pr");
-        console.log(pr_number);
-        console.log("---");
-
         if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
                         /* output optional parameters */
@@ -95,6 +87,8 @@ async function main() {
                 }
             })
         }
+
+        // Si es un pull request
         if(pr_number){
             // Instance of Octokit to call the API
             const octokit = new github.getOctokit(token);
@@ -104,42 +98,47 @@ async function main() {
                 repo,
                 pull_number: pr_number,
             });
+        
+
+            for (const file of changedFiles) {
+                let fle = file.filename.split('.');
+                const file_extension = fle.pop();
+                const mapping_file_extension = fle.pop() + "." + file_extension;
+                fle = fle.join('/').split('/').pop();
+
+                switch (file_extension) {
+                    case 'json':
+                    case 'xml':
+                    case 'csv':
+                    case 'tsv':
+                    case 'xlsx':
+                    case 'parquet':
+                    case 'feather': 
+                    case 'orc': 
+                    case 'dta':
+                    case 'sas':
+                    case 'sav':
+                    case 'ods':
+                        core.setOutput('run', true);
+                        break;
+                }
+                switch (mapping_file_extension) {
+                    case 'rml.ttl':
+                    case 'rml.nt':
+                        core.setOutput('run', true);
+                        data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file.filename;
+                        fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
+                            if (err) {
+                                core.setFailed(error.message);
+                            }
+                        });
+                        break;
+                }
+            }
         }
-
-        for (const file of changedFiles) {
-            let fle = file.filename.split('.');
-		    const file_extension = fle.pop();
-            const mapping_file_extension = fle.pop() + "." + file_extension;
-            fle = fle.join('/').split('/').pop();
-
-            switch (file_extension) {
-                case 'json':
-                case 'xml':
-                case 'csv':
-                case 'tsv':
-                case 'xlsx':
-                case 'parquet':
-                case 'feather': 
-                case 'orc': 
-                case 'dta':
-                case 'sas':
-                case 'sav':
-                case 'ods':
-                    core.setOutput('run', true);
-                    break;
-            }
-            switch (mapping_file_extension) {
-                case 'rml.ttl':
-                case 'rml.nt':
-                    core.setOutput('run', true);
-                    data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file.filename;
-                    fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
-                        if (err) {
-                            core.setFailed(error.message);
-                        }
-                    });
-                    break;
-            }
+        else {
+            let res = getAllFiles("./");
+            console.log(res);
         }
     }
     catch (error){
@@ -148,41 +147,20 @@ async function main() {
 }
 
 // search all the files in a directory
-async function walk(dir, done) {
-  var results = [];
-  fs.readdir(dir, function(err, list) {
-    if (err) return done(err);
-    var i = 0;
-    (function next() {
-      var file = list[i++];
-      if (!file) return done(null, results);
-      file = path.resolve(dir, file);
-      fs.stat(file, function(err, stat) {
-        if (stat && stat.isDirectory()) {
-          walk(file, function(err, res) {
-            results = results.concat(res);
-            next();
-          });
-        } else {
-          results.push(file);
-          next();
-        }
-      });
-    })();
-  });
-};
+function getAllFiles (dirPath, arrayOfFiles) {
+  files = fs.readdirSync(dirPath)
 
-// async function to walk
-async function makeSynchronousRequest(dir, done) {
-	try {
-		let wk = walk(dir, done);
-		let response_body = await wk;
+  arrayOfFiles = arrayOfFiles || []
 
-		return response_body;
-	}
-	catch(error) {
-		console.log(error);
-	}
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+    } else {
+      arrayOfFiles.push(path.join(__dirname, dirPath, "/", file))
+    }
+  })
+
+  return arrayOfFiles
 }
 
 main();
