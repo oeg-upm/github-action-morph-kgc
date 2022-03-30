@@ -2,14 +2,11 @@ const core =  require('@actions/core');
 const github = require('@actions/github');
 const { http, https } = require('follow-redirects');
 const fs = require('fs');
+const path = require('path');
 
 async function main() {
     try {
-        // take the input token for the action
-        const owner = core.getInput('owner', { required: true });
-        const repo = core.getInput('repo', { required: true });
-        const pr_number = core.getInput('pr_number', { required: true });
-        const token = core.getInput('token', { required: true });
+        let changes = core.getInput('changes', { required: false });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
         let output_format = core.getInput('output_format', { required: false });
@@ -24,56 +21,58 @@ async function main() {
         let logging_level = core.getInput('logging_level', { required: false });
         let logging_file = core.getInput('logging_file', { required: false });
 
-        if(output_dir){
+        if(output_dir)
             output_dir='output_dir=' + output_dir;
-        }
-        if(output_file){
+        
+        if(output_file)
             output_file='output_file=' + output_file;
-        }
-        if(output_format){
+        
+        if(output_format)
             output_format='output_format=' + output_format;
-        }
-        if(clean_output_dir){
+        
+        if(clean_output_dir)
             clean_output_dir='clean_output_dir=' + clean_output_dir;
-        }
-        if(only_printable_characters){
+        
+        if(only_printable_characters)
             only_printable_characters='only_printable_characters=' + only_printable_characters;
-        }
-        if(safe_percent_encoding){
+        
+        if(safe_percent_encoding)
             safe_percent_encoding='safe_percent_encoding=' + safe_percent_encoding;
-        }
-        if(na_filter){
+        
+        if(na_filter)
             na_filter='na_filter=' + na_filter;
-        }
-        if(na_values){
+        
+        if(na_values)
             na_values='na_values=' + na_values;
-        }
-        if(mapping_partition){
+        
+        if(mapping_partition)
             mapping_partition='mapping_partition=' + mapping_partition;
-        }
-        if(chunksize){
+        
+        if(chunksize)
             chunksize='chunksize=' + chunksize;
-        }
-        if(number_of_processes){
+        
+        if(number_of_processes)
             number_of_processes='number_of_processes=' + number_of_processes;
-        }
-        if(logging_level){
+        
+        if(logging_level)
             logging_level='logging_level=' + logging_level;
-        }
-        if(logging_file){
+        
+        if(logging_file)
             logging_file='logging_file=' + logging_file;
+        
+        if(!changes){
+            changes = [];
+            let files = getAllFiles('./');
+            for (let file of files) {
+                file = file.split('/');
+                file.splice(0, 6);
+                changes.push(file.join('/'));
+            }
         }
+        else
+            changes = changes.split('\n')
 
         core.setOutput('run', false);
-
-        // Instance of Octokit to call the API
-        const octokit = new github.getOctokit(token);
-
-        const { data: changedFiles } = await octokit.rest.pulls.listFiles({
-            owner,
-            repo,
-            pull_number: pr_number,
-        });
 
         if(fs.mkdirSync('./morph-kgc-exec/', { recursive: true })){
             let data = '[CONFIGURATION]\n#OUTPUT\n' + 
@@ -96,89 +95,63 @@ async function main() {
             })
         }
 
-        let i = 1;
-        for (const file of changedFiles) {
-            let fle = file.filename.split('.');
-		    const file_extension = fle.pop();
-            const mapping_file_extension = fle.pop() + "." + file_extension;
-            fle = fle.join('/').split('/').pop();
-
-            switch (file_extension) {
-                case 'json':
-                case 'xml':
-                case 'csv':
-                case 'tsv':
-                case 'xlsx':
-                case 'parquet':
-                case 'feather': 
-                case 'orc': 
-                case 'dta':
-                case 'sas':
-                case 'sav':
-                case 'ods':
-                    core.setOutput('run', true);
-                    break;
+        for (const file of changes) {
+            let fle = file.split('.');
+            const file_extension = fle.pop();
+            if (file_extension == 'ttl' || file_extension == 'nt'){
+                console.log(file);
+                const mapping_file_extension = fle.pop();
+                switch (file_extension) {
+                    case 'json':
+                    case 'xml':
+                    case 'csv':
+                    case 'tsv':
+                    case 'xlsx':
+                    case 'parquet':
+                    case 'feather': 
+                    case 'orc': 
+                    case 'dta':
+                    case 'sas':
+                    case 'sav':
+                    case 'ods':
+                        core.setOutput('run', true);
+                        break;
+                }
+                switch (mapping_file_extension) {
+                    case 'rml':
+                    case 'rml':
+                        fle = fle.join('/').split('/').pop();
+                        core.setOutput('run', true);
+                        data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file;
+                        fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
+                            if (err) {
+                                core.setFailed(error.message);
+                            }
+                        });
+                        break;
+                }
             }
-            switch (mapping_file_extension) {
-                case 'rml.ttl':
-                case 'rml.nt':
-                    core.setOutput('run', true);
-                    data = '\n\n[' + "mapping_" + fle + i + ']\nmappings=./' + file.filename;
-                    fs.appendFile('./morph-kgc-exec/config.ini',data,err => {
-                        if (err) {
-                            core.setFailed(error.message);
-                        }
-                    });
-                    i++;
-                    break;
-            }
-        }
+        }  
     }
     catch (error){
         core.setFailed(error.message);
     }
 }
 
-// function returns a Promise
-function get_promise(url) {
-	return new Promise((resolve, reject) => {
-		https.get(url, (response) => {
-            if (response.statusCode !== 200) {
-                    core.setFailed(`Did not get an OK from the server. Code: ${response.statusCode}, from petition to: \n`, url);
-                    response.resume();
-                    return;
-            }
-            
-			let chunks_of_data = [];
+function getAllFiles (dirPath, arrayOfFiles) {
+  let files = fs.readdirSync(dirPath)
 
-			response.on('data', (fragments) => {
-				chunks_of_data.push(fragments);
-			});
+  arrayOfFiles = arrayOfFiles || []
 
-			response.on('end', () => {
-				let response_body = Buffer.concat(chunks_of_data);
-				resolve(response_body.toString());
-			});
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+    } else {
+      arrayOfFiles.push(path.join(__dirname, dirPath, "/", file))
+    }
+  })
 
-			response.on('error', (error) => {
-				reject(error);
-			});
-		});
-	});
-}
-
-
-// async function to make http request
-async function makeSynchronousRequest(url) {
-	try {
-		let http_promise = get_promise(url);
-		let response_body = await http_promise;
-
-		return response_body;
-	}
-	catch(error) {
-		console.log(error);
-	}
+  return arrayOfFiles
 }
 
 main();

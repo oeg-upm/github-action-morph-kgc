@@ -2,18 +2,9 @@ name: 'github-action-morphkgc'
 description: 'runs morphkgc automaticly if data or mappings are added/modified'
 
 inputs:
-  owner:
-    description: 'The owner of the repository'
-    required: true
-  repo:
-    description: 'The name of the repository'
-    required: true
-  pr_number:
-    description: 'The number of the pull request'
-    required: true
-  token:
-    description: 'The token to use to access the GitHub API'
-    required: true 
+  changes:
+    description: 'The changes commited'
+    required: false 
   output_dir:
     description: 'The output directory for morphkgc'
     required: false 

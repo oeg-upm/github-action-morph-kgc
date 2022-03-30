@@ -1,5 +1,8 @@
 name: pipeline
 on:   
+  push:
+    branches:    
+      - main
   pull_request:
     branches:    
       - main
@@ -11,6 +14,14 @@ jobs:
     steps: 
       - name: checkout
         uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
+          
+      - name: changes
+        run: | 
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
+        id: "changes"
       
       - name: python version
         run: python --version
@@ -22,11 +33,7 @@ jobs:
         uses: ./
         id: 'action-morphkgc'
         with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          pr_number: ${{ github.event.number }} 
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
+          changes: ${{ steps.changes.outputs.CHANGES }}
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
           output_dir: 'morphkgc'

@@ -1,5 +1,7 @@
 # github-action-morphkgc
 The goal of this action is to create a knowledge graph from structured or semi-structured sources using RML mappings and [morph-kgc](https://github.com/oeg-upm/morph-kgc). 
+## Considerations
+The mapping file extension needs to be .rml.ttl or .rml.nt
 ## Usage
 Create a `.github.workflows/[name].yaml` file in the repository.
 
@@ -18,6 +20,14 @@ jobs:
     steps: 
       - name: checkout
         uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
+          
+      - name: changes
+        run: | 
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
+        id: "changes"
       
       - name: python version
         run: python --version
@@ -29,11 +39,7 @@ jobs:
         uses: ./
         id: 'action-morphkgc'
         with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          pr_number: ${{ github.event.number }} 
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
+          changes: ${{ steps.changes.outputs.CHANGES }}
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
           output_dir: 'morphkgc'
@@ -51,7 +57,8 @@ jobs:
         run: |
           if ${{ steps.action-morphkgc.outputs.run }}
           then
-            python3 -m morph_kgc ./morphkgc/config.ini
+            python3 -m morph_kgc ./morph-kgc-exec/config.ini
+            rm -r ./morph-kgc-exec
             git config --global user.name 'github-actions[bot]'
             git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add -A
@@ -63,15 +70,8 @@ jobs:
 
 ```
 ## Inputs
-### `owner`
-The owner of the repository, it is taken from `${{ github.repository_owner }}`. 
-### `repo`
-The repository name, it is taken from `${{ github.event.repository.name }}`. 
-### `pr_number`
-The pull request number, it is taken from `${{ github.event.number }}`. 
-### `token`
-The account access token, it is taken from `${{ secrets.GITHUB_TOKEN }}`. 
-
+### `changes` (optional)
+The changes in the commit, it is taken from an earlyer step named changes. 
 ### `output_dir` (optional)
 The output directory for morphkgc.
 - `Default value`: output
