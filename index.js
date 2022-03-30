@@ -62,12 +62,11 @@ async function main() {
         
         if(!changes){
             changes = getAllFiles('./');
-            changes.forEach(elem => 
-                elem.split('/'))
-            changes.forEach(elem => 
-                elem.splice(0, 7))
-            changes.forEach(elem => 
-                elem = elem.join('/'))
+            for (const file of changes) {
+                file = file.split('/');
+                file.splice(0, 7);
+                file = file.join('/');
+            }
         }
         else
             changes = changes.split('\n')
