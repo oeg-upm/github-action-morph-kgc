@@ -100,22 +100,22 @@ async function main() {
             const file_extension = fle.pop();
             if (file_extension == 'ttl' || file_extension == 'nt'){
                 const mapping_file_extension = fle.pop();
-                switch (file_extension) {
-                    case 'json':
-                    case 'xml':
-                    case 'csv':
-                    case 'tsv':
-                    case 'xlsx':
-                    case 'parquet':
-                    case 'feather': 
-                    case 'orc': 
-                    case 'dta':
-                    case 'sas':
-                    case 'sav':
-                    case 'ods':
-                        core.setOutput('run', true);
-                        break;
-                }
+                // switch (file_extension) {
+                //     case 'json':
+                //     case 'xml':
+                //     case 'csv':
+                //     case 'tsv':
+                //     case 'xlsx':
+                //     case 'parquet':
+                //     case 'feather': 
+                //     case 'orc': 
+                //     case 'dta':
+                //     case 'sas':
+                //     case 'sav':
+                //     case 'ods':
+                //         core.setOutput('run', true);
+                //         break;
+                // }
                 switch (mapping_file_extension) {
                     case 'rml':
                     case 'rml':
