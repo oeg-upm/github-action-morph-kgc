@@ -20,7 +20,9 @@ jobs:
       - name: commit trigger
         id: 'commit_trigger'
         run: |
-          if [ (grep '[morph-kgc]' -c <<< ${{ github.event.head_commit.message }}) > 0 ]
+          NUM=$(grep '[morph-kgc]' -c <<< ${{ github.event.head_commit.message }})
+          echo $NUM
+          if [ $NUM > 0 ]
           then
             echo "si"
           else
