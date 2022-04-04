@@ -5,6 +5,8 @@ This GitHub Action action creates a knowledge graph from structured or semi-stru
 The mapping file extension needs to be `.rml.ttl` or `.rml.nt`.
 
 ## Usage
+The mapping file extension needs to be `.rml.ttl` or `.rml.nt`.
+If you want to execute the Action you must add the word `morph-kgc` in the commit
 Create a `.github.workflows/morph-kgc.yaml` file in the repository with the following example workflow:
 
 ```
@@ -27,23 +29,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: changes
+       - name: commit trigger
+        id: 'commit_trigger'
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
-        id: "changes"
 
-      - name: python version
-        run: python --version
+          case "${{ github.event.head_commit.message }}" in
+              *morph-kgc* ) echo "::set-output name=trigger::true";;
+              * ) echo "::set-output name=trigger::false";;
+          esac
 
       - name: installing morph-kgc
-        run: pip install morph-kgc
+        run: |
+          if ${{ steps.commit_trigger.outputs.trigger }}
+          then
+            pip install morph-kgc
+          fi
 
-      - name: action-morph-kgc
-        uses: oeg-upm@github-action-morph-kgc
-        id: 'action-morph-kgc'
+      - name: action-morphkgc
+        uses: ./
+        id: 'action-morphkgc'
         with:
-          changes: ${{ steps.changes.outputs.CHANGES }}
           na_filter: 'yes'
           na_values: ',#N/A,N/A,#N/A N/A,n/a,NA,<NA>,#NA,NULL,null,NaN,nan,None'
           output_dir: 'morph-kgc'
@@ -54,13 +59,13 @@ jobs:
 
       - name: running morph-kgc
         run: |
-          if ${{ steps.action-morph-kgc.outputs.run }}
+          if ${{ steps.action-morphkgc.outputs.run }} && ${{ steps.commit_trigger.outputs.trigger }}
           then
             python3 -m morph_kgc ./morph-kgc-exec/config.ini
             rm -r ./morph-kgc-exec
             git config --global user.name 'github-actions[bot]'
             git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add -A
+            git add .
             set +e
             git status | grep "nothing to commit, working tree clean"
             if [ $? -eq 0 ]; then set -e; echo "INFO: No changes since last run"; else set -e; \

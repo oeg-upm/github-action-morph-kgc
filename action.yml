@@ -3,7 +3,7 @@ description: 'runs morphkgc automaticly if data or mappings are added/modified'
 
 inputs:
   output_dir:
-    description: 'The output directory for morphkgc'
+    description: 'The output directory for morphkgc' 
     required: false 
   output_file:
     description: 'File to write the results to. If it is empty (no value) then an independent output file is generated for each group of the mapping partition'
