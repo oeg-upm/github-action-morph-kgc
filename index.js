@@ -6,7 +6,6 @@ const path = require('path');
 
 async function main() {
     try {
-        let changes = core.getInput('changes', { required: false });
         let output_dir = core.getInput('output_dir', { required: false });
         let output_file = core.getInput('output_file', { required: false });
         let output_format = core.getInput('output_format', { required: false });
@@ -60,17 +59,14 @@ async function main() {
         if(logging_file)
             logging_file='logging_file=' + logging_file;
         
-        // if(!changes){
-            changes = [];
-            let files = getAllFiles('./');
-            for (let file of files) {
-                file = file.split('/');
-                file.splice(0, 6);
-                changes.push(file.join('/'));
-            }
-        // }
-        // else
-        //     changes = changes.split('\n')
+        
+        changes = [];
+        let files = getAllFiles('./');
+        for (let file of files) {
+            file = file.split('/');
+            file.splice(0, 6);
+            changes.push(file.join('/'));
+        }
 
         core.setOutput('run', false);
 
@@ -98,26 +94,8 @@ async function main() {
         for (const file of changes) {
             let fle = file.split('.');
             const file_extension = fle.pop();
-            console.log("loop::" + file)
             if (file_extension == 'ttl' || file_extension == 'nt'){
-                console.log("Dentro del if")
                 const mapping_file_extension = fle.pop();
-                // switch (file_extension) {
-                //     case 'json':
-                //     case 'xml':
-                //     case 'csv':
-                //     case 'tsv':
-                //     case 'xlsx':
-                //     case 'parquet':
-                //     case 'feather': 
-                //     case 'orc': 
-                //     case 'dta':
-                //     case 'sas':
-                //     case 'sav':
-                //     case 'ods':
-                //         core.setOutput('run', true);
-                //         break;
-                // }
                 switch (mapping_file_extension) {
                     case 'rml':
                     case 'rml':
