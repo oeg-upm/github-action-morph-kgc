@@ -1,6 +1,6 @@
-INFO | 2022-04-04 14:45:26,359 | 26 mapping rules retrieved.
-INFO | 2022-04-04 14:45:26,376 | Mapping partition with 1 groups generated.
-INFO | 2022-04-04 14:45:26,377 | Maximum number of rules within mapping group: 26.
-INFO | 2022-04-04 14:45:26,379 | Mappings processed in 0.608 seconds.
-INFO | 2022-04-04 14:45:26,571 | Number of triples generated in total: 27.
-INFO | 2022-04-04 14:45:26,572 | Materialization finished in 0.190 seconds.
+INFO | 2022-04-04 14:49:29,297 | 26 mapping rules retrieved.
+INFO | 2022-04-04 14:49:29,314 | Mapping partition with 1 groups generated.
+INFO | 2022-04-04 14:49:29,314 | Maximum number of rules within mapping group: 26.
+INFO | 2022-04-04 14:49:29,316 | Mappings processed in 0.478 seconds.
+INFO | 2022-04-04 14:49:29,542 | Number of triples generated in total: 27.
+INFO | 2022-04-04 14:49:29,543 | Materialization finished in 0.224 seconds.
