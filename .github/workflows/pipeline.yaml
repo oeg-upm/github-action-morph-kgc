@@ -39,11 +39,8 @@ jobs:
 
       - name: running morph-kgc
         run: |
-          #ls ./morphkgc/
-          #cat ./morphkgc/config.ini
-          #echo "---"
-
-          if ${{ steps.action-morphkgc.outputs.run }}
+          echo ${{ github.event.head_commit.message }} | grep '[morph-kgc]'
+          if ${{ steps.action-morphkgc.outputs.run }} && false
           then
             python3 -m morph_kgc ./morph-kgc-exec/config.ini
             rm -r ./morph-kgc-exec
