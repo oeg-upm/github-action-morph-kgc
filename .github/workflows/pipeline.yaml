@@ -20,7 +20,7 @@ jobs:
       - name: commit trigger
         id: 'commit_trigger'
         run: |
-          NUM=$(echo ${{ github.event.head_commit.message }} | grep -c "[morph-kgc]")
+          NUM=$(echo "\"" ${{ github.event.head_commit.message }} "\"" | grep -c "[morph-kgc]")
           echo $NUM
           if [ $NUM > 0 ]
           then
