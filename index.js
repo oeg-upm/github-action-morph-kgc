@@ -117,8 +117,8 @@ async function main() {
                 //         break;
                 // }
                 switch (mapping_file_extension) {
-                    case 'rml':
-                    case 'rml':
+                    case 'rml.ttl':
+                    case 'rml.nt':
                         fle = fle.join('/').split('/').pop();
                         core.setOutput('run', true);
                         data = '\n\n[' + "mapping_file_" + fle + ']\nmappings=./' + file;
