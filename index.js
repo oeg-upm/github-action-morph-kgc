@@ -60,7 +60,7 @@ async function main() {
             logging_file='logging_file=' + logging_file;
         
         
-        changes = [];
+        let changes = [];
         let files = getAllFiles('./');
         for (let file of files) {
             file = file.split('/');
