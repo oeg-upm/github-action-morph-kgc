@@ -6,7 +6,7 @@ The mapping file extension needs to be `.rml.ttl` or `.rml.nt`.
 
 ## Usage
 The mapping file extension needs to be `.rml.ttl` or `.rml.nt`.
-If you want to execute the Action you must add `[morph-kgc]` in the commit
+If you want to execute the Action you must add the word `morph-kgc` in the commit
 Create a `.github.workflows/morph-kgc.yaml` file in the repository with the following example workflow:
 
 ```
