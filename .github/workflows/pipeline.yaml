@@ -20,8 +20,8 @@ jobs:
       - name: commit trigger
         id: 'commit_trigger'
         run: |
-          NUM=$(echo "\"" ${{ github.event.head_commit.message }} "\"" | grep -q "[morph-kgc]")
-          echo $NUM 
+          awk '$0~/[morph-kgc]/{print "A substring called test found"}' <<< ${{ github.event.head_commit.message }}
+          grep -q "[morph-kgc]" <<< "${{ github.event.head_commit.message }}"
           # if  [[ ${{ github.event.head_commit.message }} =~ .*[morph-kgc]* ]]  
           # then
           #   echo "si"
