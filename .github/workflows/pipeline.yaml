@@ -17,8 +17,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: commit trigger
+        id: 'commit_trigger'
+        run: |
+          if [ grep '[morph-kgc]' -c <<< ${{ github.event.head_commit.message }} > 0 ]
+          then
+            echo "si"
+          else
+            echo "no"
+          fi
+          echo "::set-output name=trigger::false"
+
       - name: installing morph-kgc
-        run: pip install morph-kgc
+        run: |
+          if ${{ steps.commit_trigger.outputs.trigger }}
+          then
+            pip install morph-kgc
+          fi
 
       - name: action-morphkgc
         uses: ./
@@ -39,8 +54,7 @@ jobs:
 
       - name: running morph-kgc
         run: |
-          echo ${{ github.event.head_commit.message }} | grep '[morph-kgc]'
-          if ${{ steps.action-morphkgc.outputs.run }} && false
+          if ${{ steps.action-morphkgc.outputs.run }} && ${{ steps.commit_trigger.outputs.trigger }}
           then
             python3 -m morph_kgc ./morph-kgc-exec/config.ini
             rm -r ./morph-kgc-exec

@@ -27,15 +27,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: changes
-        run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
-        id: "changes"
-
-      - name: python version
-        run: python --version
-
       - name: installing morph-kgc
         run: pip install morph-kgc 
 
