@@ -37,7 +37,7 @@ jobs:
         run: python --version
 
       - name: installing morph-kgc
-        run: pip install morph-kgc
+        run: pip install morph-kgc 
 
       - name: action-morph-kgc
         uses: oeg-upm@github-action-morph-kgc
