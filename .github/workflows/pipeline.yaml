@@ -20,13 +20,12 @@ jobs:
       - name: commit trigger
         id: 'commit_trigger'
         run: |
-          grep -c "[morph-kgc]" <<< "${{ github.event.head_commit.message }}"
-          # if  [ grep -c "[morph-kgc]" <<< "${{ github.event.head_commit.message }}" > 0]  
-          # then
-          #   echo "si"
-          # else
-          #   echo "no"
-          # fi
+          if  [ grep -c "[morph-kgc]" <<< "${{ github.event.head_commit.message }}" > 0]  
+          then
+            echo "si"
+          else
+            echo "no"
+          fi
           echo "::set-output name=trigger::false"
 
       - name: installing morph-kgc
