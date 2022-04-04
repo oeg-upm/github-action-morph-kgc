@@ -1,5 +1,5 @@
-# github-action-morphkgc
-The goal of this action is to create a knowledge graph from structured or semi-structured sources using RML mappings and [morph-kgc](https://github.com/oeg-upm/morph-kgc). 
+# github-action-morph-kgc
+The goal of this action is to create a knowledge graph from structured or semi-structured sources using RML mappings and [morph-kgc](https://github.com/oeg-upm/morph-kgc).
 ## Considerations
 The mapping file extension needs to be .rml.ttl or .rml.nt
 ## Usage
@@ -20,18 +20,18 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     name: action-morphkgc
-    steps: 
+    steps:
       - name: checkout
         uses: actions/checkout@v2
-        with: 
+        with:
           fetch-depth: 0
-          
+
       - name: changes
-        run: | 
+        run: |
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
           echo "::set-output name=CHANGES::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
         id: "changes"
-      
+
       - name: python version
         run: python --version
 
@@ -55,7 +55,7 @@ jobs:
           chunksize: '100000'
           logging_level: 'INFO'
           logging_file: 'logs'
-      
+
       - name: running morph-kgc
         run: |
           if ${{ steps.action-morphkgc.outputs.run }}
@@ -68,13 +68,13 @@ jobs:
             set +e
             git status | grep "nothing to commit, working tree clean"
             if [ $? -eq 0 ]; then set -e; echo "INFO: No changes since last run"; else set -e; \
-              git commit -m "morph-kgc result for ${{ github.actor }} - ${{ github.event.number }}" --allow-empty; git push origin HEAD:${{ github.head_ref }} --force; fi
+              git commit -m "morph-kgc result for ${{ github.actor }} - ${{ github.event.number }}" --allow-empty; git push --force; fi
           fi
 
 ```
 ## Inputs
 ### `changes` (optional)
-The changes in the commit, it is taken from an earlyer step named changes. 
+The changes in the commit, it is taken from an earlyer step named changes.
 ### `output_dir` (optional)
 The output directory for morphkgc.
 - `Default value`: output
