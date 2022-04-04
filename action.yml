@@ -2,9 +2,6 @@ name: 'github-action-morphkgc'
 description: 'runs morphkgc automaticly if data or mappings are added/modified'
 
 inputs:
-  changes:
-    description: 'The changes commited'
-    required: false 
   output_dir:
     description: 'The output directory for morphkgc'
     required: false 
