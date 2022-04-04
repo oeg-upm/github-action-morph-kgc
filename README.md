@@ -68,7 +68,7 @@ jobs:
             set +e
             git status | grep "nothing to commit, working tree clean"
             if [ $? -eq 0 ]; then set -e; echo "INFO: No changes since last run"; else set -e; \
-              git commit -m "morph-kgc result for ${{ github.actor }} - ${{ github.event.number }}" --allow-empty; git push origin HEAD:${{ github.head_ref }} --force; fi
+              git commit -m "morph-kgc result for ${{ github.actor }} - ${{ github.event.number }}" --allow-empty; git push --force; fi
           fi
 
 ```
