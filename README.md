@@ -40,7 +40,7 @@ jobs:
         run: pip install morph-kgc
 
       - name: action-morph-kgc
-        uses: ./
+        uses: oeg-upm@github-action-morph-kgc
         id: 'action-morph-kgc'
         with:
           changes: ${{ steps.changes.outputs.CHANGES }}
