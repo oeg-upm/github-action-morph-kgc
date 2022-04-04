@@ -22,17 +22,9 @@ jobs:
         run: |
 
           case "${{ github.event.head_commit.message }}" in
-              *[morph-kgc]* ) echo "do something";;
-              * ) echo "Error...";;
+              *[morph-kgc]* ) echo "::set-output name=trigger::true";;
+              * ) echo "::set-output name=trigger::false";;
           esac
-          # NUM=$(grep -c "[morph-kgc]" <<< "${{ github.event.head_commit.message }}")  
-          # if  [[ $NUM > 0 ]]  
-          # then
-          #   echo "si"
-          # else
-          #   echo "no"
-          # fi
-          echo "::set-output name=trigger::false"
 
       - name: installing morph-kgc
         run: |
