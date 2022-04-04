@@ -3,7 +3,7 @@ The goal of this action is to create a knowledge graph from structured or semi-s
 ## Considerations
 The mapping file extension needs to be .rml.ttl or .rml.nt
 ## Usage
-Create a `.github.workflows/[name].yaml` file in the repository.
+Create a `.github.workflows/[name].yaml` file in the repository. 
 
 Example workflow:
 ```
