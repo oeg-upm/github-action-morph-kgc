@@ -20,8 +20,6 @@ jobs:
       - name: commit trigger
         id: 'commit_trigger'
         run: |
-          NUM=$(echo "\"" ${{ github.event.head_commit.message }} "\"" | grep -q "[morph-kgc]")
-          echo $NUM
           if  [[ ${{ github.event.head_commit.message }} =~ .*[morph-kgc].* ]]  
           then
             echo "si"
