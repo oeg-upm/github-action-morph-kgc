@@ -22,10 +22,9 @@ jobs:
         run: |
 
           case "${{ github.event.head_commit.message }}" in
-              *morph-kgc* ) echo "true";;
-              * ) echo "false";;
+              *morph-kgc* ) echo "::set-output name=trigger::true";;
+              * ) echo "::set-output name=trigger::false";;
           esac
-          echo "::set-output name=trigger::false"
 
       - name: installing morph-kgc
         run: |

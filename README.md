@@ -34,7 +34,7 @@ jobs:
         run: |
 
           case "${{ github.event.head_commit.message }}" in
-              *[morph-kgc]* ) echo "::set-output name=trigger::true";;
+              *morph-kgc* ) echo "::set-output name=trigger::true";;
               * ) echo "::set-output name=trigger::false";;
           esac
 
