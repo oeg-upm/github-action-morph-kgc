@@ -60,7 +60,7 @@ async function main() {
         if(logging_file)
             logging_file='logging_file=' + logging_file;
         
-        if(!changes){
+        // if(!changes){
             changes = [];
             let files = getAllFiles('./');
             for (let file of files) {
@@ -68,9 +68,9 @@ async function main() {
                 file.splice(0, 6);
                 changes.push(file.join('/'));
             }
-        }
-        else
-            changes = changes.split('\n')
+        // }
+        // else
+        //     changes = changes.split('\n')
 
         core.setOutput('run', false);
 
@@ -98,7 +98,9 @@ async function main() {
         for (const file of changes) {
             let fle = file.split('.');
             const file_extension = fle.pop();
+            console.log("loop::" + file)
             if (file_extension == 'ttl' || file_extension == 'nt'){
+                console.log("Dentro del if")
                 const mapping_file_extension = fle.pop();
                 // switch (file_extension) {
                 //     case 'json':
