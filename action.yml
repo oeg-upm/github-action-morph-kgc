@@ -1,9 +1,9 @@
 name: 'github-action-morphkgc'
-description: 'runs morphkgc automaticly if data or mappings are added/modified'
+description: 'runs morph-kgc automatically whenever the source data or mappings are added/modified'
 
 inputs:
   output_dir:
-    description: 'The output directory for morphkgc' 
+    description: 'The output directory for morph-kgc' 
     required: false 
   output_file:
     description: 'File to write the results to. If it is empty (no value) then an independent output file is generated for each group of the mapping partition'
@@ -12,13 +12,13 @@ inputs:
     description: 'RDF serialization to use for output results'
     required: false 
   clean_output_dir:
-    description: 'Remove everything from output_dir before starting with materialization'
+    description: 'Remove everything from output_dir before starting with the materialization'
     required: false 
   only_printable_characters:
-    description: 'Remove characters in the genarated RDF that are not printable'
+    description: 'Remove those characters in the generated RDF that are not printable'
     required: false 
   safe_percent_encoding:
-    description: 'Set of ASCII characters that should not be percent encoded. All characters are encoded by default'
+    description: 'Set of ASCII characters that should not be percent-encoded. All characters are encoded by default'
     required: false 
   na_filter:
     description: 'If specified, the values from the option na_values will be interpreted as NULL'
@@ -44,7 +44,7 @@ inputs:
 
 outputs:
   run:
-    description: 'Tells the pipeline if morphkgc needs to be executed'
+    description: 'Tells the pipeline if morph-kgc needs to be executed'
 
 runs:
   using: 'node16'
