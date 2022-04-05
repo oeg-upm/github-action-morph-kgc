@@ -1,12 +1,9 @@
 # github-action-morph-kgc
 This GitHub Action action creates a knowledge graph from structured or semi-structured sources using RML mappings and [Morph-KGC](https://github.com/oeg-upm/morph-kgc).
 
-## Considerations
-The mapping file extension needs to be `.rml.ttl` or `.rml.nt`.
-
 ## Usage
 The mapping file extension needs to be `.rml.ttl` or `.rml.nt`.
-If you want to execute the Action you must add the word `morph-kgc` in the commit
+In order to execute the action include the word `morph-kgc` in the comment of the commit, otherwise the action will not be triggered.
 Create a `.github.workflows/morph-kgc.yaml` file in the repository with the following example workflow:
 
 ```
