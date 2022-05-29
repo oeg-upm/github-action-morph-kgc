@@ -106,3 +106,7 @@ Set of values to be interpreted as NULL when retrieving data from the input sour
 Tells the pipeline if morph-kgc needs to be executed.
 - `true` if there are mapping files.
 - `false` if there are no mapping files.
+
+---
+
+El trabajo realizado en este repositorio ha sido elaborado por Miguel Jorge Garcia-Muñoz en el contexto de un Trabajo Fin de Grado de la [ETSIINF](https://www.fi.upm.es/) del curso 2021-2022, bajo la dirección de Oscar Corcho.
